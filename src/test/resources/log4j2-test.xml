@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" shutdownHook="disable">
+  <Properties>
+    <Property name="ConsoleHighlightColors">{FATAL=bold red, ERROR=red, WARN=yellow, INFO=Normal, DEBUG=white, TRACE=black BG_white}</Property>
+    <Property name="ExceptionFilters">org.junit,org.apache.maven,sun.reflect,java.lang.reflect</Property>
+    <Property name="consoleLogPattern">%highlight{%d{ISO8601} %-5p}${ConsoleHighlightColors} [%cyan{%c{1}}] %highlight{%m}${ConsoleHighlightColors}%n%xEx{filters(${ExceptionFilters})}</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="CONSOLE">
+      <PatternLayout pattern="${consoleLogPattern}" disableAnsi="false" />
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Root level="INFO">
+      <AppenderRef ref="CONSOLE" />
+    </Root>
+  </Loggers>
+</Configuration>
