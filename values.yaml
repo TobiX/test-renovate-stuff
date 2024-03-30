@@ -1,0 +1,4 @@
+---
+image:
+  repository: 'axllent/mailpit'
+  tag: v1.15.0
