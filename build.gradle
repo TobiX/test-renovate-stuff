@@ -80,7 +80,7 @@ dependencies {
   testPlugins 'org.jenkins-ci.plugins:view-job-filters:382.vdf2d5e3f02f0'
   testPlugins 'org.jenkins-ci.plugins.workflow:workflow-job:1360.vc6700e3136f5'
   testPlugins 'org.jenkins-ci.plugins.workflow:workflow-multibranch:716.vc692a_e52371b_'
-  testPlugins 'org.jvnet.hudson.plugins:favorite:2.208.v91d65b_7792a_c'
+  testPlugins 'org.jvnet.hudson.plugins:favorite:2.218.vd60382506538'
 
   // Broken metadata in dom4j, see https://github.com/gradle/gradle/issues/13656#issuecomment-658873625
   components {
