@@ -1,0 +1,136 @@
+plugins {
+  id 'groovy'
+  id 'jacoco'
+  id 'com.github.ben-manes.versions' version '0.51.0'
+}
+
+defaultTasks 'libs', 'test', 'jacocoTestReport'
+
+sourceSets {
+  jobs {
+    groovy {
+      srcDirs 'jobs'
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  maven { url 'https://repo.jenkins-ci.org/public/' }
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+jacoco {
+  toolVersion = '0.8.12'
+}
+
+tasks.named('wrapper') {
+  distributionType = Wrapper.DistributionType.ALL
+}
+
+configurations {
+  libs
+  testPlugins
+  implementation.extendsFrom(libs)
+}
+
+dependencies {
+  implementation "org.jenkins-ci.main:jenkins-war:2.452.2"
+  implementation 'com.google.guava:guava:33.2.1-jre' // Workaround for https://github.com/google/guava/issues/6642
+  implementation("org.jenkins-ci.plugins:job-dsl-core:1.87") {
+    exclude module: 'xstream'
+  }
+  implementation "org.jenkins-ci.plugins:cloudbees-folder:6.858.v898218f3609d@jar"
+
+  testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
+  testImplementation 'net.bytebuddy:byte-buddy:1.14.18' // used by Spock
+  testImplementation 'org.wiremock:wiremock-standalone:3.9.1'
+
+  // Jenkins test harness dependencies
+  testImplementation 'org.jenkins-ci.main:jenkins-test-harness:2248.v5fb_b_936a_1d7a_'
+
+  // Job DSL plugin including plugin dependencies
+  testImplementation "org.jenkins-ci.plugins:job-dsl:1.87"
+  testImplementation "org.jenkins-ci.plugins:job-dsl:1.87@jar"
+  testImplementation 'org.jenkins-ci.plugins:branch-api:2.1178.v969d9eb_c728e@jar'
+  testImplementation 'org.jenkins-ci.plugins:scm-api:690.vfc8b_54395023@jar'
+  testImplementation 'org.jenkins-ci.plugins:structs:337.v1b_04ea_4df7c8@jar'
+  testImplementation 'org.jenkins-ci.plugins.workflow:workflow-step-api:639.v6eca_cd8c04a_a_@jar'
+
+  // plugins to install in test instance
+  testPlugins 'io.jenkins.plugins:bootstrap5-api:5.3.3-1'
+  testPlugins 'io.jenkins.plugins:commons-text-api:1.12.0-119.v73ef73f2345d'
+  testPlugins 'io.jenkins.plugins:gitlab-branch-source:704.vc7f1202d7e14'
+  testPlugins 'io.jenkins.plugins:warnings-ng:11.3.0'
+  testPlugins "org.jenkins-ci.plugins:cloudbees-folder:6.858.v898218f3609d"
+  testPlugins 'org.jenkins-ci.plugins:build-user-vars-plugin:166.v52976843b_435'
+  testPlugins 'org.jenkins-ci.plugins:compact-columns:1.199.v61a_f51712072'
+  testPlugins 'org.jenkins-ci.plugins:extra-columns:1.26'
+  testPlugins 'org.jenkins-ci.plugins:git:5.2.2'
+  testPlugins 'org.jenkins-ci.plugins:junit:1265.v65b_14fa_f12f0'
+  testPlugins 'org.jenkins-ci.plugins:mailer:472.vf7c289a_4b_420'
+  testPlugins 'org.jenkins-ci.plugins:matrix-project:832.va_66e270d2946'
+  testPlugins 'org.jenkins-ci.plugins:pipeline-maven:1421.v610fa_b_e2d60e'
+  testPlugins 'org.jenkins-ci.plugins:token-macro:400.v35420b_922dcb_'
+  testPlugins 'org.jenkins-ci.plugins:view-job-filters:382.vdf2d5e3f02f0'
+  testPlugins 'org.jenkins-ci.plugins.workflow:workflow-job:1360.vc6700e3136f5'
+  testPlugins 'org.jenkins-ci.plugins.workflow:workflow-multibranch:716.vc692a_e52371b_'
+  testPlugins 'org.jvnet.hudson.plugins:favorite:2.208.v91d65b_7792a_c'
+
+  // Broken metadata in dom4j, see https://github.com/gradle/gradle/issues/13656#issuecomment-658873625
+  components {
+    withModule('org.dom4j:dom4j', ClearDependencies)
+  }
+}
+
+class ClearDependencies implements ComponentMetadataRule {
+  void execute(ComponentMetadataContext context) {
+    context.details.allVariants { withDependencies { clear() } }
+  }
+}
+
+task resolveTestPlugins(type: Copy) {
+  from configurations.testPlugins
+  into new File(sourceSets.test.output.resourcesDir, 'test-dependencies')
+  include '*.hpi'
+  include '*.jpi'
+  def mapping = [:]
+
+  doFirst {
+    configurations.testPlugins.resolvedConfiguration.resolvedArtifacts.each {
+      mapping[it.file.name] = "${it.name}.${it.extension}"
+    }
+  }
+  rename { mapping[it] }
+
+  doLast {
+    List<String> baseNames = source*.name.collect { mapping[it] }.collect { it[0..it.lastIndexOf('.') - 1] }
+    new File(destinationDir, 'index').setText(baseNames.join('\n'), 'UTF-8')
+  }
+}
+
+test {
+  dependsOn tasks.resolveTestPlugins
+  inputs.files sourceSets.jobs.groovy.srcDirs
+
+  // set build directory for Jenkins test harness, JENKINS-26331
+  systemProperty 'buildDirectory', project.layout.buildDirectory.asFile.get().absolutePath
+  // Breaks with jenkins-test-harness >= 2.45
+  systemProperty 'jenkins.test.noSpaceInTmpDirs', true
+
+  jvmArgs(
+    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+  )
+}
+
+task libs(type: Copy) {
+  dependsOn tasks.cleanLibs
+  into 'lib'
+  from configurations.libs
+}
