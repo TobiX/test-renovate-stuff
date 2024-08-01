@@ -78,7 +78,7 @@ dependencies {
   testPlugins 'org.jenkins-ci.plugins:pipeline-maven:1421.v610fa_b_e2d60e'
   testPlugins 'org.jenkins-ci.plugins:token-macro:400.v35420b_922dcb_'
   testPlugins 'org.jenkins-ci.plugins:view-job-filters:382.vdf2d5e3f02f0'
-  testPlugins 'org.jenkins-ci.plugins.workflow:workflow-job:1360.vc6700e3136f5'
+  testPlugins 'org.jenkins-ci.plugins.workflow:workflow-job:1436.vfa_244484591f'
   testPlugins 'org.jenkins-ci.plugins.workflow:workflow-multibranch:716.vc692a_e52371b_'
   testPlugins 'org.jvnet.hudson.plugins:favorite:2.208.v91d65b_7792a_c'
 
