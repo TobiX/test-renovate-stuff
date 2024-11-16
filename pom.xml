@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <jetty.version>9.4.56.v20240826</jetty.version>
+    <jetty.version>12.0.15</jetty.version>
   </properties>
 
   <dependencyManagement>
