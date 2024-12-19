@@ -40,7 +40,7 @@ configurations {
 }
 
 dependencies {
-  implementation "org.jenkins-ci.main:jenkins-war:2.452.2"
+  implementation "org.jenkins-ci.main:jenkins-war:2.491"
   implementation 'com.google.guava:guava:33.2.1-jre' // Workaround for https://github.com/google/guava/issues/6642
   implementation("org.jenkins-ci.plugins:job-dsl-core:1.87") {
     exclude module: 'xstream'
