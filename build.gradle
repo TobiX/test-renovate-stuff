@@ -66,7 +66,7 @@ dependencies {
   testPlugins 'io.jenkins.plugins:bootstrap5-api:5.3.3-1'
   testPlugins 'io.jenkins.plugins:commons-text-api:1.12.0-119.v73ef73f2345d'
   testPlugins 'io.jenkins.plugins:gitlab-branch-source:704.vc7f1202d7e14'
-  testPlugins 'io.jenkins.plugins:warnings-ng:11.3.0'
+  testPlugins 'io.jenkins.plugins:warnings-ng:11.12.0'
   testPlugins "org.jenkins-ci.plugins:cloudbees-folder:6.858.v898218f3609d"
   testPlugins 'org.jenkins-ci.plugins:build-user-vars-plugin:166.v52976843b_435'
   testPlugins 'org.jenkins-ci.plugins:compact-columns:1.199.v61a_f51712072'
