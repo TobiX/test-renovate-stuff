@@ -59,7 +59,7 @@ dependencies {
   testImplementation "org.jenkins-ci.plugins:job-dsl:1.87@jar"
   testImplementation 'org.jenkins-ci.plugins:branch-api:2.1178.v969d9eb_c728e@jar'
   testImplementation 'org.jenkins-ci.plugins:scm-api:690.vfc8b_54395023@jar'
-  testImplementation 'org.jenkins-ci.plugins:structs:337.v1b_04ea_4df7c8@jar'
+  testImplementation 'org.jenkins-ci.plugins:structs:338.v848422169819@jar'
   testImplementation 'org.jenkins-ci.plugins.workflow:workflow-step-api:639.v6eca_cd8c04a_a_@jar'
 
   // plugins to install in test instance
