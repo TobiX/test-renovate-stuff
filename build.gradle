@@ -48,7 +48,7 @@ dependencies {
   implementation "org.jenkins-ci.plugins:cloudbees-folder:6.858.v898218f3609d@jar"
 
   testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
-  testImplementation 'net.bytebuddy:byte-buddy:1.14.18' // used by Spock
+  testImplementation 'net.bytebuddy:byte-buddy:1.18.2' // used by Spock
   testImplementation 'org.wiremock:wiremock-standalone:3.9.1'
 
   // Jenkins test harness dependencies
