@@ -63,7 +63,7 @@ dependencies {
   testImplementation 'org.jenkins-ci.plugins.workflow:workflow-step-api:639.v6eca_cd8c04a_a_@jar'
 
   // plugins to install in test instance
-  testPlugins 'io.jenkins.plugins:bootstrap5-api:5.3.3-1'
+  testPlugins 'io.jenkins.plugins:bootstrap5-api:5.3.8-895.v4d0d8e47fea_d'
   testPlugins 'io.jenkins.plugins:commons-text-api:1.12.0-119.v73ef73f2345d'
   testPlugins 'io.jenkins.plugins:gitlab-branch-source:704.vc7f1202d7e14'
   testPlugins 'io.jenkins.plugins:warnings-ng:11.3.0'
